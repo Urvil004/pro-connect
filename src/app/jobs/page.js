@@ -1,7 +1,5 @@
 'use client';
-useEffect(() => {
-  fetchJobs();
-}, [fetchJobs]);
+
 import { useState, useEffect } from 'react';
 import { 
   Briefcase, 
@@ -47,7 +45,7 @@ export default function JobsPage() {
   useEffect(() => {
     // Simulate fetching jobs from API
     fetchJobs();
-  }, []);
+  }, [fetchJobs]);
 
   const fetchJobs = async () => {
     // Simulate API call
