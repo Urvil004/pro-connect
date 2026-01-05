@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useDarkMode } from "@/context/DarkModeContext"; // ✅ Import dark mode context
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/Card";
@@ -36,7 +35,6 @@ import {
 
 export default function SettingsPage() {
   const { user, logout } = useAuth();
-  const { darkMode, toggleDarkMode } = useDarkMode(); // ✅ Use dark mode context
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("account");
   const [emailNotifications, setEmailNotifications] = useState(true);
@@ -49,6 +47,27 @@ export default function SettingsPage() {
   const [readReceipts, setReadReceipts] = useState(true);
   const [loading, setLoading] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+
+ // Handle dark mode on client side
+  useEffect(() => {
+    // Check if dark mode is enabled
+    const isDark = document.documentElement.classList.contains('dark');
+    setDarkMode(isDark);
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('darkMode', 'true');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('darkMode', 'false');
+    }
+  };
+
 
   const showSaveSuccess = () => {
     setSaveSuccess(true);
