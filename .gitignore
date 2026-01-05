@@ -1,0 +1,63 @@
+# ================================
+# DEPENDENCIES (Both Frontend & Backend)
+# ================================
+**/node_modules/
+node_modules/
+/.pnp
+.pnp.js
+
+# ================================
+# NEXT.JS (FRONTEND)
+# ================================
+**/.next/
+.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# ================================
+# BUILD OUTPUT
+# ================================
+**/build/
+**/dist/
+build/
+dist/
+
+# ================================
+# ENVIRONMENT VARIABLES
+# ================================
+.env
+.env.local
+.env*.local
+**/.env
+**/.env.local
+**/.env.development
+**/.env.production
+
+# ================================
+# LOGS
+# ================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# ================================
+# MISC
+# ================================
+.DS_Store
+*.pem
+.idea/
+.vscode/
+Thumbs.db
+
+# ================================
+# VERCEL
+# ================================
+.vercel
+
+# ================================
+# UPLOADS (if any)
+# ================================
+uploads/
+**/uploads/
