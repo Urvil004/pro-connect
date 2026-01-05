@@ -42,10 +42,31 @@ export default function JobsPage() {
     expectedSalary: 80000,
   };
 
-  useEffect(() => {
-    // Simulate fetching jobs from API
-    fetchJobs();
-  }, [fetchJobs]);
+  const calculateMatchScore = (job) => {
+    let score = 0;
+
+    // Skill match (40 points)
+    const matchingSkills = job.skills.filter(skill => 
+      userProfile.skills.some(us => us.toLowerCase() === skill.toLowerCase())
+    );
+    score += (matchingSkills.length / job.skills.length) * 40;
+
+    // Location match (20 points)
+    if (job.location.includes(userProfile.location)) score += 20;
+
+    // Salary match (20 points)
+    if (job.salary.min <= userProfile.expectedSalary && job.salary.max >= userProfile.expectedSalary) {
+      score += 20;
+    }
+
+    // Job freshness (10 points)
+    score += Math.max(10 - job.postedDays, 0);
+
+    // Competition level (10 points)
+    score += Math.max(10 - (job.applicants / 20), 0);
+
+    return Math.min(Math.round(score), 100);
+  };
 
   const fetchJobs = async () => {
     // Simulate API call
@@ -149,31 +170,9 @@ export default function JobsPage() {
     }, 1000);
   };
 
-  const calculateMatchScore = (job) => {
-    let score = 0;
-
-    // Skill match (40 points)
-    const matchingSkills = job.skills.filter(skill => 
-      userProfile.skills.some(us => us.toLowerCase() === skill.toLowerCase())
-    );
-    score += (matchingSkills.length / job.skills.length) * 40;
-
-    // Location match (20 points)
-    if (job.location.includes(userProfile.location)) score += 20;
-
-    // Salary match (20 points)
-    if (job.salary.min <= userProfile.expectedSalary && job.salary.max >= userProfile.expectedSalary) {
-      score += 20;
-    }
-
-    // Job freshness (10 points)
-    score += Math.max(10 - job.postedDays, 0);
-
-    // Competition level (10 points)
-    score += Math.max(10 - (job.applicants / 20), 0);
-
-    return Math.min(Math.round(score), 100);
-  };
+  useEffect(() => {
+    fetchJobs();
+  }, []); // Empty dependency array - fetchJobs is stable
 
   const toggleSaveJob = (jobId) => {
     setSavedJobs(prev => 
@@ -380,7 +379,7 @@ export default function JobsPage() {
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
                   <p className="text-xs text-slate-600 dark:text-gray-400 mb-1">Avg. Match Score</p>
                   <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                    {Math.round(jobs.reduce((sum, job) => sum + job.matchScore, 0) / jobs.length)}%
+                    {Math.round(jobs.reduce((sum, job) => sum + job.matchScore, 0) / jobs.length)}
                   </p>
                 </div>
               </div>
